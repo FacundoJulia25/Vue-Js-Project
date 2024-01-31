@@ -1,12 +1,7 @@
 <template>
   <div>
-    <Navbar
-      :pages="pages"
-      :active-page="activePage"
-      :click-nav-link="(index) => (activePage = index)"
-    />
-    <PageViewer :page="pages[activePage]"></PageViewer>
-    <CreatePage :page-created="pageCreated" />
+    <Navbar :pages="publishedPages" :active-page="activePage" />
+    <router-view></router-view>
   </div>
 </template>
 
@@ -22,8 +17,16 @@ export default {
       pages: [],
     };
   },
+  computed: {
+    publishedPages() {
+      return this.pages.filter((page) => page.published);
+    },
+  },
   created() {
     this.getPages();
+    this.$bus.$on("navbarLinkActived", (index) => {
+      this.activePage = index;
+    });
   },
   components: {
     Navbar,
@@ -40,6 +43,7 @@ export default {
     pageCreated(pageObj) {
       this.pages.push(pageObj);
     },
+    navbarLinkActived() {},
   },
 };
 </script>

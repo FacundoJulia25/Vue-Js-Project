@@ -79,7 +79,7 @@ export default {
       if (!this.isDataFullfilled) {
         return alert("Please, fullfill the entire form.");
       } else {
-        this.pageCreated({
+        this.$emit("pageCreated", {
           pageTitle: this.pageTitle,
           content: this.content,
           link: {
@@ -101,7 +101,6 @@ export default {
         (this.published = true);
     },
   },
-  props: ["pageCreated"],
   watch: {
     pageTitle(newTitle, oldTitle) {
       if (this.link.linkText == oldTitle) {

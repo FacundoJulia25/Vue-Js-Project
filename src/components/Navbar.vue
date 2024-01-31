@@ -7,18 +7,14 @@
     <div class="container-fluid">
       <a class="navbar-brand" href="#">My vue</a>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li
-          v-for="(page, index) in publishedPages"
-          class="nav-link"
+        <NavbarLink
+          v-for="(page, index) in pages"
+          class="nav-item"
+          :page="page"
+          :index="index"
+          :is-active="activePage == index"
           :key="index"
-        >
-          <NavbarLink
-            :page="page"
-            :is-active="activePage == index"
-            @click.prevent="clickNavLink(index)"
-            :key="index"
-          ></NavbarLink>
-        </li>
+        ></NavbarLink>
       </ul>
       <form class="d-flex">
         <button class="btn btn-primary" @click.prevent="changeTheme()">
@@ -41,13 +37,7 @@ export default {
   created() {
     this.getStorageTheme();
   },
-  computed: {
-    publishedPages() {
-      return this.pages.filter((page) => page.published);
-    },
-  },
-
-  props: ["pages", "activePage", "clickNavLink"],
+  props: ["pages", "activePage"],
   methods: {
     changeTheme() {
       let theme = "light";
