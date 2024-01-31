@@ -3,7 +3,6 @@
     :href="page.link.url"
     :title="`This link goes to the ${page.link.text} page`"
     class="nav-link"
-    :key="index"
     aria-current="page"
     :class="activeClasses"
     >{{ page.link.text }}

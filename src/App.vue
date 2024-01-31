@@ -1,40 +1,45 @@
 <template>
-    <div>
-        <Navbar :pages="pages" :active-page="activePage" :click-nav-link="(index) => activePage = index" />
-        <PageViewer :page="pages[activePage]"></PageViewer>
-    </div>
+  <div>
+    <Navbar
+      :pages="pages"
+      :active-page="activePage"
+      :click-nav-link="(index) => (activePage = index)"
+    />
+    <PageViewer :page="pages[activePage]"></PageViewer>
+    <CreatePage :page-created="pageCreated" />
+  </div>
 </template>
 
 <script>
-import Navbar from './components/Navbar.vue'
-import PageViewer from './components/PageViewer.vue'
+import Navbar from "./components/Navbar.vue";
+import PageViewer from "./components/PageViewer.vue";
+import CreatePage from "./components/CreatePage.vue";
 
 export default {
-    data() {
-        return {
-            activePage: 0,
-            pages: [
-                {
-                    link: { text: 'Home', url: 'index.html' },
-                    pageTitle: 'Home',
-                    content: 'This is the home content'
-                },
-                {
-                    link: { text: 'About Us', url: 'about.html' },
-                    pageTitle: 'About Us',
-                    content: 'This is the About Us content'
-                },
-                {
-                    link: { text: 'Contact', url: 'contact.html' },
-                    pageTitle: 'Contact',
-                    content: 'This is the Contact content'
-                }
-            ]
-        };
+  data() {
+    return {
+      activePage: 0,
+      pages: [],
+    };
+  },
+  created() {
+    this.getPages();
+  },
+  components: {
+    Navbar,
+    PageViewer,
+    CreatePage,
+  },
+  methods: {
+    async getPages() {
+      let res = await fetch("pages.json");
+      let data = await res.json();
+
+      this.pages = data;
     },
-    components: {
-        Navbar,
-        PageViewer,
-    }
-}
+    pageCreated(pageObj) {
+      this.pages.push(pageObj);
+    },
+  },
+};
 </script>

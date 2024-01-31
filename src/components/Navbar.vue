@@ -7,11 +7,16 @@
     <div class="container-fluid">
       <a class="navbar-brand" href="#">My vue</a>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li v-for="(page, index) in pages" class="nav-link" :key="index">
+        <li
+          v-for="(page, index) in publishedPages"
+          class="nav-link"
+          :key="index"
+        >
           <NavbarLink
             :page="page"
             :is-active="activePage == index"
             @click.prevent="clickNavLink(index)"
+            :key="index"
           ></NavbarLink>
         </li>
       </ul>
@@ -30,9 +35,18 @@ import NavbarLink from "./NavbarLink.vue";
 export default {
   data() {
     return {
-      theme: "dark",
+      theme: "light",
     };
   },
+  created() {
+    this.getStorageTheme();
+  },
+  computed: {
+    publishedPages() {
+      return this.pages.filter((page) => page.published);
+    },
+  },
+
   props: ["pages", "activePage", "clickNavLink"],
   methods: {
     changeTheme() {
@@ -41,6 +55,16 @@ export default {
         theme = "dark";
       }
       this.theme = theme;
+      this.setStorageTheme();
+    },
+    setStorageTheme() {
+      localStorage.setItem("theme", this.theme);
+    },
+    getStorageTheme() {
+      let theme = localStorage.getItem("theme");
+      if (theme) {
+        this.theme = theme;
+      }
     },
   },
   components: {
