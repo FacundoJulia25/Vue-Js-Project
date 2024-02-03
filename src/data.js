@@ -15,4 +15,8 @@ export default {
     pagesStore[index] = page;
     localStorage.setItem(pagesKey, JSON.stringify(pagesStore));
   },
+  addPage(newPage) {
+    pagesStore.push(newPage);
+    localStorage.setItem(pagesKey, JSON.stringify(pagesStore));
+  },
 };

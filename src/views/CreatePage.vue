@@ -21,16 +21,6 @@
           <label for="" class="form-label">Link Text</label>
           <input bin v-model="link.linkText" type="text" class="form-control" />
         </div>
-        <div class="mb-3 w-50">
-          <label for="published" class="form-label">Link Url</label>
-          <input
-            bin
-            v-model="link.linkUrl"
-            name="published"
-            type="text"
-            class="form-control"
-          />
-        </div>
       </div>
       <div class="mb-3">
         <input type="checkbox" v-model="published" />
@@ -49,64 +39,56 @@
   </div>
 </template>
 
+<script setup>
+import { ref, inject, computed, watch } from "vue";
+import { useRouter } from "vue-router";
+
+const pageTitle = ref("");
+const content = ref("");
+const link = ref({ linkText: "" });
+const published = ref(true);
+const router = useRouter();
+const bus = inject("$bus");
+const pages = inject("$pages");
+
+function submitForm() {
+  if (!isDataFullfilled) {
+    return alert("Please, fullfill the entire form.");
+  } else {
+    let newPage = {
+      pageTitle: pageTitle.value,
+      content: content.value,
+      link: {
+        text: link.value.linkText,
+      },
+      published: published.value,
+    };
+
+    pages.addPage(newPage);
+    bus.$emit("page-created", {
+      newPage,
+    });
+    router.push({ path: "/pages" });
+  }
+}
+
+const isDataFullfilled = computed(() => {
+  if (!pageTitle.value || !content.value || !link.value.linkText) {
+    return false;
+  } else return true;
+});
+
+watch(pageTitle, (newVal, oldVal) => {
+  {
+    if (link.value.linkText == oldVal) {
+      link.value.linkText = newVal;
+    }
+  }
+});
+</script>
+
 <script>
 export default {
-  computed: {
-    isDataFullfilled() {
-      if (
-        !this.pageTitle ||
-        !this.content ||
-        !this.link.linkText ||
-        !this.link.linkUrl
-      ) {
-        return false;
-      } else return true;
-    },
-  },
-  data() {
-    return {
-      pageTitle: "",
-      content: "",
-      link: {
-        linkText: "",
-        linkUrl: "",
-      },
-      published: true,
-    };
-  },
-  methods: {
-    submitForm() {
-      if (!this.isDataFullfilled) {
-        return alert("Please, fullfill the entire form.");
-      } else {
-        this.$emit("pageCreated", {
-          pageTitle: this.pageTitle,
-          content: this.content,
-          link: {
-            text: this.link.linkText,
-            url: this.link.linkUrl,
-          },
-          published: this.published,
-        });
-        this.clearForm();
-      }
-    },
-    clearForm() {
-      (this.pageTitle = ""),
-        (this.content = ""),
-        (this.link = {
-          linkText: "",
-          linkUrl: "",
-        }),
-        (this.published = true);
-    },
-  },
-  watch: {
-    pageTitle(newTitle, oldTitle) {
-      if (this.link.linkText == oldTitle) {
-        this.link.linkText = newTitle;
-      }
-    },
-  },
+  methods: {},
 };
 </script>
