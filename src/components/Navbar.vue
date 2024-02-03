@@ -17,10 +17,10 @@
         <li>
           <router-link
             active-class="active"
-            to="/pages/create"
+            to="/pages"
             class="nav-link"
             aria-current="page"
-            >Create Page
+            >Pages
           </router-link>
         </li>
       </ul>
@@ -37,6 +37,7 @@
 import NavbarLink from "./NavbarLink.vue";
 
 export default {
+  inject: ["$pages", "$bus"],
   data() {
     return {
       theme: "light",
@@ -46,6 +47,9 @@ export default {
   created() {
     this.getStorageTheme();
     this.pages = this.$pages.getAllPages();
+    this.$bus.$on("page-updated", () => {
+      this.pages = [...this.$pages.getAllPages()];
+    });
   },
   computed: {
     publishedPages() {

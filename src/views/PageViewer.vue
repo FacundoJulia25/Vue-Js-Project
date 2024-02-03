@@ -6,6 +6,7 @@
 </template>
 <script>
 export default {
+  inject: ["$pages"],
   props: ["index"],
   data() {
     return {

@@ -8,7 +8,8 @@ const app = createApp(App);
 
 app.use(router);
 // This allows us to use globally our global event "$bus"
-app.config.globalProperties.$bus = $bus;
-app.config.globalProperties.$pages = $pages;
+// app.config.globalProperties.$pages = $pages;
+app.provide("$bus", $bus);
+app.provide("$pages", $pages);
 
 app.mount("#app");
