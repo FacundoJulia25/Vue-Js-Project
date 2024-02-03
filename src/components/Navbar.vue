@@ -8,13 +8,21 @@
       <a class="navbar-brand" href="#">My vue</a>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <NavbarLink
-          v-for="(page, index) in pages"
+          v-for="(page, index) in publishedPages"
           class="nav-item"
           :page="page"
           :index="index"
-          :is-active="activePage == index"
           :key="index"
         ></NavbarLink>
+        <li>
+          <router-link
+            active-class="active"
+            to="/pages/create"
+            class="nav-link"
+            aria-current="page"
+            >Create Page
+          </router-link>
+        </li>
       </ul>
       <form class="d-flex">
         <button class="btn btn-primary" @click.prevent="changeTheme()">
@@ -32,12 +40,18 @@ export default {
   data() {
     return {
       theme: "light",
+      pages: {},
     };
   },
   created() {
     this.getStorageTheme();
+    this.pages = this.$pages.getAllPages();
   },
-  props: ["pages", "activePage"],
+  computed: {
+    publishedPages() {
+      return this.pages.filter((f) => f.published);
+    },
+  },
   methods: {
     changeTheme() {
       let theme = "light";
