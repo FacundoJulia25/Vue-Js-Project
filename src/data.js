@@ -3,6 +3,9 @@ const pagesKey = "pages";
 let pagesJson = localStorage.getItem(pagesKey);
 let pagesStore = JSON.parse(pagesJson);
 
+function save() {
+  localStorage.setItem(pagesKey, JSON.stringify(pagesStore));
+}
 export default {
   getAllPages() {
     return pagesStore;
@@ -13,10 +16,14 @@ export default {
   },
   editPage(index, page) {
     pagesStore[index] = page;
-    localStorage.setItem(pagesKey, JSON.stringify(pagesStore));
+    save();
   },
   addPage(newPage) {
     pagesStore.push(newPage);
-    localStorage.setItem(pagesKey, JSON.stringify(pagesStore));
+    save();
+  },
+  removePage(index) {
+    pagesStore.splice(index, 1);
+    save();
   },
 };

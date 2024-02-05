@@ -19,7 +19,7 @@
       <div class="d-flex justify-content-between">
         <div class="mb-3 w-50 pe-4">
           <label for="" class="form-label">Link Text</label>
-          <input bin v-model="link.linkText" type="text" class="form-control" />
+          <input bin v-model="link.text" type="text" class="form-control" />
         </div>
       </div>
       <div class="mb-3">
@@ -30,7 +30,7 @@
         <button
           :disabled="!isDataFullfilled"
           class="btn btn-primary"
-          @click.prevent="submitForm()"
+          @click.prevent="submitForm"
         >
           Create Page
         </button>
@@ -45,7 +45,7 @@ import { useRouter } from "vue-router";
 
 const pageTitle = ref("");
 const content = ref("");
-const link = ref({ linkText: "" });
+const link = ref({ text: "" });
 const published = ref(true);
 const router = useRouter();
 const bus = inject("$bus");
@@ -59,7 +59,7 @@ function submitForm() {
       pageTitle: pageTitle.value,
       content: content.value,
       link: {
-        text: link.value.linkText,
+        text: link.value.text,
       },
       published: published.value,
     };
@@ -73,16 +73,14 @@ function submitForm() {
 }
 
 const isDataFullfilled = computed(() => {
-  if (!pageTitle.value || !content.value || !link.value.linkText) {
+  if (!pageTitle.value || !content.value || !link.value.text) {
     return false;
   } else return true;
 });
 
 watch(pageTitle, (newVal, oldVal) => {
-  {
-    if (link.value.linkText == oldVal) {
-      link.value.linkText = newVal;
-    }
+  if (link.value.text == oldVal) {
+    link.value.text = newVal;
   }
 });
 </script>
